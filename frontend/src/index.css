@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+
+
+body{
+    background-color: black;
+    color: white;
+}
+
+@layer base {
+    @font-face {
+      font-family: 'Boldonse';
+      src: url('/fonts/Boldonse-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face{
+      font-family: 'Dosis-Light';
+      src: url('/fonts/Dosis-Light.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Lexend-Medium';
+      src: url('/fonts/Lexend-Medium.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Train-One";
+      src: url('/fonts/TrainOne-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: "Monoton";
+      src: url('/fonts/Monoton-Regular.ttf') format('truetype');
+    }
+}
+
+
+.scrollbar-hide {
+scrollbar-width: none;     /* Firefox */
+-ms-overflow-style: none;  /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+display: none;             /* Chrome, Safari, Opera */
+}
+
