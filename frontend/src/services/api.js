@@ -35,9 +35,9 @@ export const topRated = async ()=>{
   return data.results;
 }
 
-// Get All Trending Today
-export const trending = async ()=>{
-  const res = await fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', Header);
+// Get Todays trends
+export const trending = async (type)=>{
+  const res = await fetch(`https://api.themoviedb.org/3/trending/${type||'all'}/day?language=en-US`, Header);
   const data = await res.json();
   return data.results;
 }
@@ -49,73 +49,9 @@ export const movies = async (type)=>{
   return data.results;
 }
 
-
-
-
-
-// get popular a streaming services
-export const getPopular = async () => {
-    try {
-      const res = await fetch("https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_by=popularity_1year", headers);
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-// get all show based on show type
-export const getAllShow = async(show_type)=>{
-    try{
-        const res = await fetch(`https://streaming-availability.p.rapidapi.com/shows/search/filters?show_type=${show_type}&country=us`, headers);
-        const data = await res.json();
-        return data;
-    }catch(err){
-        console.error(err.message)
-    }
-}
-
-//get trending based on streaming service
-export const trendingOnStream = async (stream) => {
-    try{
-      const res = await fetch(`https://streaming-availability.p.rapidapi.com/shows/top?country=us&service=${stream}`, headers);
-      const data = await res.json();
-      return data;
-
-    }catch(err){
-      console.error(err.message)
-    }
-}
-
-// filter by genre
-export const getBasedOnGenre = async (genre)=>{
-  try{
-    const res = await fetch(`https://streaming-availability.p.rapidapi.com/shows/search/filters?genres=${genre}`, headers);
-    const data = await res.json();
-    return data;
-  }catch(err){
-    console.error(err.message)
-  }
-}
-
-// get all genre 
-export const getAllGenre = async ()=>{
-  try{
-    const res = await fetch('https://streaming-availability.p.rapidapi.com/genres?output_language=en', headers);
-    const data = await res.json();
-    return data;
-  }catch(err){
-    console.error(err.message)
-  }
-}
-
-// search based on a keyword
-export const searchKeyword = async (keyword)=>{
-  try{
-      const res = await fetch(`https://streaming-availability.p.rapidapi.com/shows/search/filters?keyword=${keyword}`, headers);
-      const data = await res.json();
-      return data;
-  }catch(err){
-    console.error(err.message)
-  }
+// get show credits 
+export const getDetails = async (showId) =>{
+  const res = await fetch(`https://api.themoviedb.org/3/movie/${showId}/credits`, Headers);
+  const data = await res.json();
+  return data.cast;
 }

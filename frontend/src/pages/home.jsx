@@ -1,75 +1,55 @@
 import { useEffect, useState } from "react"
 import Hero from "../components/hero"
 import Tile from "../components/tile"
-import { trendingOnStream } from "../services/api"
-import HeroCard from "../components/hero_card"
+import { trending } from "../services/api";
 
-const images = [
-    'placeholder1.jpg',
-    'placeholder1.jpg',
-    'placeholder1.jpg',
-    'placeholder1.jpg',
-    'placeholder1.jpg',
-]
 
 function Home(){
-    const [streamTrends, setStreamTrends] = useState({
-        netflix: [],
-        prime: [],
-        max: [],
-        disney: []
-    })
+    const [trends, setTrends] = useState({
+      movies: [],
+      tv_show: []
+    });
 
+    useEffect(()=>{
+        const loadTrends = async ()=>{
+            try{
+                const movies_data = await trending("movie");
+                const tvShow_data = await trending("tv")
+                setTrends({
+                  movies: movies_data,
+                  tv_show: tvShow_data
+                })
 
-
-
-    // useEffect(()=>{
-    //     const loadStreamTrends = async ()=>{
-    //         try{
-    //             const netflixData = await trendingOnStream("netflix");
-    //             const prime_data = await trendingOnStream("prime");
-    //             const max_data = await trendingOnStream("hbo");
-    //             const disney_data = await trendingOnStream("disney")
-    //             setStreamTrends({
-    //                 netflix: netflixData,
-    //                 prime: prime_data,
-    //                 max: max_data,
-    //                 disney: disney_data,
-    //             })
-    //             console.log("netflix: ", netflixData)
                 
-    //         }catch(err){
-    //             console.error(err.message)
-    //         }
-    //     }
-    //     loadStreamTrends();
-    // },[])
-
-    function clickEvent(){
-        console.log(index)
-    }
-
-   
+            }catch(err){
+                console.error(err.message)
+            }
+        }
+        loadTrends();
+    },[])
+     
 
     return(
         <div className="snap-y scroll-smoot overflow-scroll h-screen w-full scrollbar-hide">
             <Hero/>
 
             <div className=" w-full px-5 py-15 snap-start snap-normal flex flex-col justify-evenly items-center gap-3">
-              {/* <iframe
-                title="Testing api video"
-                width="500"
-                height="500"
-                className="border-4"
-                src="https://www.youtube.com/embed/e0Y8KpQpW8c?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              /> */}
-              <Tile/>
-              <Tile/>
+              <Tile
+                title= "Trending Movies"
+                data={trends.movies}
+                
+              />
+              <Tile
+                title = "Trending Tv"
+                data={trends.tv_show}
+              />
+              <Tile
+                title = "New Release"
+              />
             </div>
 
             <div className="border-4 h-screen w-full px-3  snap-start snap-normal flex flex-col justify-evenly items-center">
-
+              
             </div>
             
         </div>
@@ -77,3 +57,13 @@ function Home(){
 }
 
 export default Home
+
+
+ {/* <iframe
+                title="Testing api video"
+                width="500"
+                height="500"
+                className="border-4"
+                src="https://www.youtube.com/embed/e0Y8KpQpW8c?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              /> */}
