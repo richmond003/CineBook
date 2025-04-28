@@ -9,11 +9,11 @@ function Tile({data,title,}){
     return(
        <>
             <div className=" w-full flex flex-col justify-center gap-2">
-                <div>{title ||"TITLE"}</div>
-                <hr/>
-                <div className="flex flex-row items-center gap-5 w-full h-full py-2 overflow-x-scroll overflow-y-hidden scrollbar-hide">
+                <div className="text-2xl text-purple-500 font-extrabold">{title ||"TITLE"}</div>
+                <hr className="text-purple-500"/>
+                <div className=" border-amber-200 flex flex-row gap-3 w-full py-3 overflow-x-scroll overflow-y-hidden scrollbar-hide">
                     {(data||[...Array(5)]).map((movie, index)=>(
-                        <div className="snap-start" key={index}>
+                        <div className="snap-start z-40" key={index}>
                             <Card  
                                 key={index}
                                 data={movie} 

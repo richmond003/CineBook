@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Hero from "../components/hero"
 import Tile from "../components/tile"
-import { trending } from "../services/api";
+import { trending, upcoming_show } from "../services/api";
 
 
 function Home(){
@@ -10,8 +10,10 @@ function Home(){
       tv_show: []
     });
 
+    const [upComing, setUpComing] = useState([]);
+
     useEffect(()=>{
-        const loadTrends = async ()=>{
+        const loadData = async ()=>{
             try{
                 const movies_data = await trending("movie");
                 const tvShow_data = await trending("tv")
@@ -20,12 +22,15 @@ function Home(){
                   tv_show: tvShow_data
                 })
 
+                const new_movies = await upcoming_show();
+                setUpComing(new_movies)
+
                 
             }catch(err){
                 console.error(err.message)
             }
         }
-        loadTrends();
+        loadData();
     },[])
      
 
@@ -33,18 +38,19 @@ function Home(){
         <div className="snap-y scroll-smoot overflow-scroll h-screen w-full scrollbar-hide">
             <Hero/>
 
-            <div className=" w-full px-5 py-15 snap-start snap-normal flex flex-col justify-evenly items-center gap-3">
+            <div className=" w-full px-10 py-15 snap-start snap-normal flex flex-col justify-evenly items-center gap-3">
               <Tile
                 title= "Trending Movies"
                 data={trends.movies}
                 
               />
               <Tile
-                title = "Trending Tv"
+                title = "Trending Tv Shows"
                 data={trends.tv_show}
               />
               <Tile
-                title = "New Release"
+                title = "Upcoming"
+                data={upComing}
               />
             </div>
 

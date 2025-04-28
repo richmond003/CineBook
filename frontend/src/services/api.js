@@ -49,9 +49,23 @@ export const movies = async (type)=>{
   return data.results;
 }
 
-// get show credits 
-export const getDetails = async (showId) =>{
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${showId}/credits`, Headers);
+// get Cast
+const cast = async (show_type,id) => {
+  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}/credits`);
   const data = await res.json();
   return data.cast;
+}
+
+// get details
+const details = async (show_type, id)=>{
+  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}`);
+  const data = await res.json();
+  return data;
+}
+
+// upcoming movies
+export const upcoming_show = async ()=>{
+  const res = await fetch("https://api.themoviedb.org/3/movie/upcoming", Header);
+  const data = await res.json();
+  return data.results;
 }
