@@ -146,5 +146,4 @@ dist
 *.sln
 *.sw?
 
-# hidden folders
- README_images/
+README_images/
