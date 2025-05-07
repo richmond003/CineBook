@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import Card from "./card";
-import Button from "./button";
+// import Button from "./button";
 import { getPopularMovies, trending} from "../services/api";
 import { ReactComponent as Info } from '../assets/icons8-information-64.svg';
 import {ReactComponent as Add} from '../assets/add_icon2.svg';
 import {ReactComponent as Star} from '../assets/star-circle2.svg';
 import { useNavigate } from "react-router";
+import { Button } from "@mui/material";
 
 
 
@@ -15,14 +16,6 @@ function Hero(){
     const [movieIndex, setMovieIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-
-    const images = [
-        'placeholder1.jpg',
-        'placeholder1.jpg',
-        'placeholder1.jpg',
-        'placeholder1.jpg',
-        'placeholder1.jpg',
-    ]
 
     useEffect(()=>{
         const loadMovies = async ()=>{
@@ -44,6 +37,8 @@ function Hero(){
     const backgroundImg = movies[movieIndex]?.backdrop_path;
     const year = new Date(movies[movieIndex]?.release_date || movies[movieIndex]?.first_air_date);
     const rating = movies[movieIndex]?.vote_average.toFixed(1);
+    const show_id = movies[movieIndex]?.id;
+    const media_type = movies[movieIndex]?.media_type;
 
     // functions
     function showAsBackground(index){
@@ -85,9 +80,13 @@ function Hero(){
                                 </p>
 
                                 <div className="flex flex-row gap-5">
-                                    <Button
+                                    {/* <Button
                                         title= "Get Info"
-                                        handclick={()=> navigate(`/info/title`)}
+                                        handclick={()=> navigate(`/info/title`, {
+                                            state: {
+                                                id: show_id
+                                            }
+                                        })}
                                         style= "border-1 border-purple-500 text-purple-500 h-10 w-40 rounded-2xl hover:bg-purple-500 hover:text-white group pointer-event-auto"
                                         icon={<Info className="w-7 h-7 fill-purple-500 group-hover:fill-white"/>}
                                     />
@@ -95,7 +94,27 @@ function Hero(){
                                         title= "My List"
                                         style= "border-1 h-10 w-40 rounded-2xl"
                                         icon={<Add className=" w-7 h-7 fill-white"/>}
-                                    />
+                                    /> */}
+                                    <Button 
+                                    variant="outlined" 
+                                    color="secondary" 
+                                    size="large" 
+                                    startIcon={<Info className="w-7 h-7 fill-purple-500"/>} 
+                                    onClick={()=> navigate(`/info/title`, {
+                                        state: {
+                                            id: show_id,
+                                            isMovie: media_type === "movie" ? true : false
+                                        }
+                                    })}
+                                    >Get info</Button>
+
+
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        size="large"
+                                        startIcon={<Add className=" w-7 h-7 fill-white"/>}
+                                    >Add To List</Button>
                                 </div>
                                 
                                  

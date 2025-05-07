@@ -21,7 +21,6 @@ const Header = {
 }
 
 
-
 export const getPopularMovies = async () => {
     const res = await fetch(`${Base_URL}/movie/popular?api_key=${API_KEY}`);
     const data = await res.json();
@@ -50,15 +49,15 @@ export const movies = async (type)=>{
 }
 
 // get Cast
-const cast = async (show_type,id) => {
-  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}/credits`);
+export const getCast = async (show_type,id) => {
+  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}/credits`, Header);
   const data = await res.json();
   return data.cast;
 }
 
 // get details
-const details = async (show_type, id)=>{
-  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}`);
+export const getDetails = async (show_type, id)=>{
+  const res = await fetch(`https://api.themoviedb.org/3/${show_type}/${id}`, Header);
   const data = await res.json();
   return data;
 }
@@ -68,4 +67,40 @@ export const upcoming_show = async ()=>{
   const res = await fetch("https://api.themoviedb.org/3/movie/upcoming", Header);
   const data = await res.json();
   return data.results;
+}
+
+// get trailer
+export const getTrailer = async (media_type, id)=>{
+  try{
+      const res = await fetch(`https://api.themoviedb.org/3/${media_type}/${id}/videos`, Header);
+      const data = await res.json();
+      const videos = data.results;
+      const trailer = await videos.find(item => item.type === "Trailer")?.key;
+      console.log(trailer)
+      return trailer;
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+// get Images
+export const getGallary =  async (media_type, id) =>{
+  try{
+      const res = await fetch(`https://api.themoviedb.org/3/${media_type}/${id}/images`, Header);
+      const data = await res.json();
+      return data;
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+// get user profile
+export const getProfile = async () =>{
+  try{
+    const res = await fetch("http://localhost:5000/backend/server");
+    const data = await res.json();
+    return data;
+  }catch(err){
+    console.error(err.message)
+  }
 }

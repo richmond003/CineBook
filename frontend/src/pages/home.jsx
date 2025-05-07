@@ -65,11 +65,3 @@ function Home(){
 export default Home
 
 
- {/* <iframe
-                title="Testing api video"
-                width="500"
-                height="500"
-                className="border-4"
-                src="https://www.youtube.com/embed/e0Y8KpQpW8c?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              /> */}

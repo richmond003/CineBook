@@ -1,7 +1,26 @@
 import { Link } from "react-router-dom";
 import {ReactComponent as Search} from '../assets/icons8-search-100.svg';
+import { useEffect, useState } from "react";
+import { getProfile } from "../services/api";
+import UserMenu from "./user_menu";
 
 function NavBar({style}){
+    const [userProfile, setUserProfile] = useState({})
+    useEffect(()=>{
+        const loadUser = async ()=>{
+            try{
+                const profile = await getProfile()
+                console.log(profile)
+                setUserProfile(profile)
+                
+            }catch(err){
+                console.error(err.message)
+            }
+        }
+
+        loadUser();
+    }, [])
+
     return(
         <nav className={style ||"w-full "}>
 
@@ -17,11 +36,14 @@ function NavBar({style}){
 
                 <div className="flex flex-row gap-7 items-center justify-center">
                     <div><Search className=" w-7 h-7 fill-white"/></div>
-                    <div className="h-10 w-10 rounded-full border-2 overflow-hidden">
+                    {/* <div className="h-10 w-10 rounded-full border-2 overflow-hidden">
                         <img 
-                            src="https://image.tmdb.org/t/p/original/bT3IpP7OopgiVuy6HCPOWLuaFAd.jpg"
+                            src={userProfile?.user}
                             className="h-full w-full object-cover "
                         />
+                    </div> */}
+                    <div>
+                        <UserMenu/>
                     </div>
                 </div>
 
