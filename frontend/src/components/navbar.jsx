@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import {ReactComponent as Search} from '../assets/icons8-search-100.svg';
 import { useEffect, useState } from "react";
-import { getProfile } from "../services/api";
+import { getProfile } from "../services/backend_api";
 import UserMenu from "./user_menu";
 
 function NavBar({style}){

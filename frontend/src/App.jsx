@@ -4,6 +4,8 @@ import Home from './pages/home'
 import TvShows from './pages/tvshows'
 import NavBar from './components/navbar'
 import Show from './pages/show_info'
+import SignUp from './pages/signup'
+import Login from './pages/login'
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
               <Route path='/movies' element={<><NavBar/><Movies/></>}/>
               <Route path='/tv_shows' element={<><NavBar/><TvShows/></>}/>
               <Route path='/info/:id' element={<><Show/></>}/>
+              <Route path='/signup' element={<SignUp/>}/>
+              <Route path='/login' element={<Login/>}/>
             </Routes>
           {/* </div> */}
       </div>
