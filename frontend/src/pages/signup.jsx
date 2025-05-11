@@ -2,12 +2,13 @@ import TextFieldComponent, { PasswordField } from "../components/text_field";
 import { Button, Divider } from "@mui/material";
 import {ReactComponent as Google} from "../assets/google.svg"
 import { useNavigate } from "react-router";
-import { useState } from "react";
-import { registerUser } from "../services/backend_api";
+import {useState } from "react";
+import { useAuth } from "../context/AuthenContext";
 
 
 function SignUp(){
-    const navigate = useNavigate()
+    const {signUpUser} = useAuth();
+    const navigate = useNavigate();
     const [passwordMixmatch, setPasswordMixmatch] = useState(false)
     const [passwordHelper, setPasswordHelper] = useState("")
     const [userData, setUserData] = useState({
@@ -18,6 +19,8 @@ function SignUp(){
         cPassword: ""
     })
 
+   
+
     // handle user inputs changes
     const handleChange = (e)=>{
         const {name, value} = e.target;
@@ -25,16 +28,19 @@ function SignUp(){
     }
 
     //handle submit and sending data over to backend
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
        try{
         e.preventDefault();
-        console.log("submitted")
         if(userData.password !== userData.cPassword){
             setPasswordMixmatch(true);
             setPasswordHelper("Password did not match")
         }else{
-            const status = await registerUser(userData)
-            console.log(status)
+            console.log("working")
+            const user = await signUpUser(userData);
+            console.log("user at handle", user);
+            if(user.sucess){
+                navigate('/')
+            }
         }
 
        }catch(err){

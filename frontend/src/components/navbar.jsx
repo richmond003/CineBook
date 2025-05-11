@@ -3,9 +3,11 @@ import {ReactComponent as Search} from '../assets/icons8-search-100.svg';
 import { useEffect, useState } from "react";
 import { getProfile } from "../services/backend_api";
 import UserMenu from "./user_menu";
+import { useAuth } from "../context/AuthenContext";
 
 function NavBar({style}){
     const [userProfile, setUserProfile] = useState({})
+    
     useEffect(()=>{
         const loadUser = async ()=>{
             try{

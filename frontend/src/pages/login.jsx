@@ -1,12 +1,15 @@
 import { Button, Divider} from "@mui/material"
 import TextFieldComponent, {PasswordField} from "../components/text_field"
 import {ReactComponent as Google} from "../assets/google.svg"
-import { useNavigate } from "react-router"
+import { data, useNavigate } from "react-router"
 import { useState } from "react";
+import { login } from "../services/backend_api";
+import { useAuth } from "../context/AuthenContext";
 
 
 function Login(){
     const navigate = useNavigate();
+    const {loginUser} = useAuth();
     const [userInput, setUserInput] = useState({
         email: "",
         password: ""
@@ -21,7 +24,13 @@ function Login(){
     // handle user subbmission
     const handleSubmit = async (e)=>{
         try{
+            e.preventDefault();
+            const user = await loginUser(userInput)
+            if(user.sucess){
+                setUserInput(() => ({email: "", password: ""}));
+                navigate('/');
 
+            }
         }catch(err){
             console.error(err.message)
         }

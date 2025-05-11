@@ -1,15 +1,51 @@
 import { Avatar, IconButton, Menu, MenuItem, Tooltip } from "@mui/material"
 import { Fragment, useState } from "react"
+import { useAuth } from "../context/AuthenContext";
+import { useNavigate } from "react-router";
+
+function stringToColor(string) {
+    let hash = 0;
+    let i;
+  
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+  
+    let color = '#';
+  
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+  
+    return color;
+  }
+  
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(' ')[0][0]}`,
+    };
+  }
 
 function UserMenu(){
+    const {user, logout} = useAuth();
+    const navigate = useNavigate();
+    const fname = user.user.fname;
+   console.log("first name:", fname)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (e) =>{
-        setAnchorEl(e.currentTarget);
-    }
+
+    const handleClick = (e) => setAnchorEl(e.currentTarget);
+    const handleClose = () => setAnchorEl(null)
     
-    const handleClose = () => {
-        setAnchorEl(null)
+    const signOut = () =>{
+        logout();
+        navigate("/login")
     }
 
     return(
@@ -23,7 +59,7 @@ function UserMenu(){
                         aria-haspopup= 'true'
                         aria-expanded={open ? 'true' : undefined}
                     >
-                    <Avatar sx={{width: 32, height: 32}}>R</Avatar>
+                    <Avatar sx={{width: 32, height: 32}} {...stringAvatar(fname || "")}/>
                     </IconButton>
                 </Tooltip>
 
@@ -64,10 +100,15 @@ function UserMenu(){
                     transformOrigin={{horizontal: "right", vertical: "top"}}
                     anchorOrigin={{horizontal: "right", vertical: "bottom"}}
                 >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={()=>{
+                        handleClose();
+                        signOut()
+                        }}>
                         LogOut
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={()=>{
+                        handleClose();
+                        }}>
                         Delect Account
                     </MenuItem>
                 </Menu>

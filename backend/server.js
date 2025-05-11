@@ -45,38 +45,60 @@ app.post('/register', async (req, res)=>{
         const userData = req.body;
         console.log(userData)
         const {fname, lname, email, password} = userData;
-        const existingUser = await db.findOne({email: email});
-        console.log("Existing User: ",existingUser)
-        if(!existingUser){
+        const currentUser = await db.findOne({email: email});
+        if(!currentUser){
+            // if user doesn't already exist
             bcrypt.hash(password, saltRounds, async function(err, hash){
                 if(err){
                     console.log(err)
                 }else{
                     const newUser = await db.insertOne({
-                        fname: fname,
-                        lname: lname,
+                        fname: fname.charAt(0).toUpperCase() + fname.slice(1),
+                        lname: lname.charAt(0).toUpperCase() + lname.slice(1),
                         email: email,
                         hpassword: hash,
                         acc_type: "local"
                     });
                     console.log("New User: ", newUser);
+                    res.send({
+                        message: "Sucessfully registered", 
+                        sucess: true,
+                        user: {email: newUser.email, fname: newUser.fname}
+                    })
                 }
             });
+           
+        }else{
+            // email 
+            console.log("Existing User: ", currentUser)
+            res.json({message: "not a new user"})
         }
     }catch(err){
         console.error(err.message)
     }
 })
 
+// login post route
 app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {session: false}, (err, user, info)=>{
-        if (err) return next(err);
-        if(!user) return res.status(401).json({message: info?.message || 'Login failed'});
+        console.log("user: ", user);
+        console.log("Info: ", info)
+        if (err) {
+            console.error("Error during authen", err)
+            return next(err)
+        };
+        if(!user) { 
+            return res.status(401).json({
+                message: info?.message || 'Login failed',
+                sucess: false
+            }) 
+        };
 
          //if login sucessfull
         const token = jwt.sign({sub: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
         res.json({
             message: 'Login sucess', 
+            sucess: true,
             token, 
             user: {email: user.email, fname: user.fname}
         });
@@ -89,11 +111,11 @@ passport.use('local', new Strategy( {
     passwordField: 'password' 
     },
 
-    async function verify(username, password, done){
-    console.log("username: ", username)
+    async function verify(email, password, done){
+    console.log("email: ", email)
     console.log("password: ", password)
     try{
-        const user = await db.findOne({email: username});
+        const user = await db.findOne({email: email});
         console.log(user)
         if(!user || !bcrypt.compareSync(password, user.hpassword)){
             return done(null, false, {message: "Invalid Credentials"})
