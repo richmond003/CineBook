@@ -6,22 +6,22 @@ import UserMenu from "./user_menu";
 import { useAuth } from "../context/AuthenContext";
 
 function NavBar({style}){
-    const [userProfile, setUserProfile] = useState({})
+    // const [userProfile, setUserProfile] = useState({})
     
-    useEffect(()=>{
-        const loadUser = async ()=>{
-            try{
-                const profile = await getProfile()
-                console.log(profile)
-                setUserProfile(profile)
+    // useEffect(()=>{
+    //     const loadUser = async ()=>{
+    //         try{
+    //             const profile = await getProfile()
+    //             console.log(profile)
+    //             setUserProfile(profile)
                 
-            }catch(err){
-                console.error(err.message)
-            }
-        }
+    //         }catch(err){
+    //             console.error(err.message)
+    //         }
+    //     }
 
-        loadUser();
-    }, [])
+    //     loadUser();
+    // }, [])
 
     return(
         <nav className={style ||"w-full "}>

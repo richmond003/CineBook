@@ -1,5 +1,5 @@
 import TextFieldComponent, { PasswordField } from "../components/text_field";
-import { Button, Divider } from "@mui/material";
+import { Alert, Button, Divider, Snackbar } from "@mui/material";
 import {ReactComponent as Google} from "../assets/google.svg"
 import { useNavigate } from "react-router";
 import {useState } from "react";
@@ -18,6 +18,8 @@ function SignUp(){
         password: "",
         cPassword: ""
     })
+    const [error, setError] = useState(false)
+    const [open, setOpen] = useState(false)
 
    
 
@@ -25,6 +27,14 @@ function SignUp(){
     const handleChange = (e)=>{
         const {name, value} = e.target;
         setUserData(prev => ({...prev, [name]:value}))
+    }
+
+    // handle close snackbar
+    const handleClose = (event, reason)=>{
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpen(false)
     }
 
     //handle submit and sending data over to backend
@@ -39,7 +49,10 @@ function SignUp(){
             const user = await signUpUser(userData);
             console.log("user at handle", user);
             if(user.sucess){
-                navigate('/')
+                navigate('/');
+            }else{
+                setError(true)
+                setOpen(true)
             }
         }
 
@@ -50,6 +63,21 @@ function SignUp(){
 
     return(
         <>
+            <div>
+                <Snackbar 
+                    open={open}  
+                    autoHideDuration={5000} 
+                    onClose={handleClose}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        variant="filled"
+                    >
+                        {"Email already exist. Try Logging in instead :("}
+                    </Alert>
+                </Snackbar>
+            </div>
             <div className="h-screen w-screen border-4 overflow-hidden place-content-center place-items-center">
                <div className="border-4 border-amber-200 h-150 - w-300 flex flex-row">
                     <div className="border-4 border-green-500 h-full w-[40%] ">
@@ -75,6 +103,7 @@ function SignUp(){
                                     <TextFieldComponent
                                         name={"email"}
                                         label={"Email"}
+                                        error={error}
                                         placeholder={"name@example.com"}
                                         type={"email"}
                                         onChange={handleChange}

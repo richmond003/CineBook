@@ -8,8 +8,6 @@ import {ReactComponent as Star} from '../assets/star-circle2.svg';
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
 
-
-
 function Hero(){
     // react hooks
     const [movies, setMovies] = useState([]);
@@ -21,11 +19,8 @@ function Hero(){
         const loadMovies = async ()=>{
             try{
                 const popularMovies = await trending();
-                console.log(popularMovies)
                 setMovies(popularMovies);
                
-                
-
             }catch(err){
                 console.error(err.message);
                 
@@ -135,7 +130,7 @@ function Hero(){
                                  <Card  
                                     key={data.id} 
                                     data={data} 
-                                    clickListner={()=>showAsBackground(index)} 
+                                    onClick={()=>showAsBackground(index)} 
                                     style={"flex flex-col h-60 w-45 overflow-hidden rounded-3xl transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"}
                                 />
                                 </div>

@@ -94,3 +94,43 @@ export const getGallary =  async (media_type, id) =>{
   }
 }
 
+// get genre
+const getAllGenres = async (type) =>{
+    try{
+      const res = await fetch(`https://api.themoviedb.org/3/genre/${type}/list?language=en`, Header);
+      const data = await res.json();
+      return data.genres;
+    }catch(err){
+      console.log(err)
+    }
+}
+
+//get based on genre
+const getGenreBasedData = async (type , id) => {
+  try{
+      const res = await fetch(`https://api.themoviedb.org/3/discover/${type}?with_genres=${id}`, Header);
+      const data = await res.json();
+      console.log(data)
+      return data.results;
+  }catch(err){
+    console.log(err)
+  }
+}
+
+export const genreShows = async (type) => {
+  const genres = await getAllGenres(type);
+  const data = await Promise.all(
+    genres.map(async (item) => {
+      const genreData = await getGenreBasedData(type ,item.id);
+      console.log(item.id)
+      console.log(genreData)
+      return {
+        name: item.name,
+        data: genreData,
+      };
+    })
+  );
+  return data;
+};
+
+

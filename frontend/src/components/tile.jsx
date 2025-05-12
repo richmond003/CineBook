@@ -1,25 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import Card from "./card";
-import { Divider } from "@mui/material";
 
-function Tile({data,title,}){
+function Tile({data,title, isMovie}){
     const navigate = useNavigate();
-    function functest(index){
-        console.log(index)
-    }
     return(
        <>
             <div className=" w-full flex flex-col justify-center gap-2">
                 <div className="text-2xl text-purple-500 font-bold">{title ||"TITLE"}</div>
                 <hr className="text-purple-500"/>
-                <Divider color="purple" textAlign="left" sx={{color: "purple"}}></Divider>
-                <div className=" border-amber-200 flex flex-row gap-3 w-full py-3 overflow-x-scroll overflow-y-hidden scrollbar-hide">
+                <div className=" border-amber-200 flex flex-row gap-5 w-full py-3 overflow-x-scroll overflow-y-hidden scrollbar-hide">
                     {(data||[...Array(5)]).map((movie, index)=>(
-                        <div className="snap-start z-40" key={index}>
+                        <div className="snap-start " key={index}>
                             <Card  
                                 key={index}
                                 data={movie} 
-                                clickListner={()=> navigate(`/info/${index}`)} 
+                                onClick={()=> navigate(`/info/${index}`, {
+                                   state: {
+                                        id: movie.id,
+                                        isMovie: isMovie
+                                   }
+                                })} 
                             />
                         </div>
                     ))} 

@@ -29,7 +29,6 @@ function Login(){
             if(user.sucess){
                 setUserInput(() => ({email: "", password: ""}));
                 navigate('/');
-
             }
         }catch(err){
             console.error(err.message)

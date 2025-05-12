@@ -4,9 +4,11 @@ import nedb from "nedb-promises";
 import bcrypt from "bcrypt";
 import passport from 'passport';
 import session from 'express-session';
-import {Strategy} from 'passport-local'
+import { Strategy } from 'passport-local'
 import jwt from 'jsonwebtoken'
 import env from "dotenv";
+import cookieParser from 'cookie-parser';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 env.config()
 
 const port = 5000;
@@ -21,9 +23,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.use(cors({
@@ -38,6 +40,17 @@ app.get('/backend/server', (req, res)=>{
         msg: "Hello world"
     })
 })
+
+app.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+    // passport sets req.user if token is valid
+    res.json({
+      message: 'Profile data fetched successfully',
+      user: {
+        fname: req.user.fname,
+        email: req.user.email,
+      },
+    });
+  });
 
 // register new user or redirect existing email to 
 app.post('/register', async (req, res)=>{
@@ -64,14 +77,16 @@ app.post('/register', async (req, res)=>{
                         message: "Sucessfully registered", 
                         sucess: true,
                         user: {email: newUser.email, fname: newUser.fname}
-                    })
+                    });
                 }
             });
            
         }else{
-            // email 
             console.log("Existing User: ", currentUser)
-            res.json({message: "not a new user"})
+            res.json({
+                message: "Account already exist",
+                sucess: false
+            })
         }
     }catch(err){
         console.error(err.message)
@@ -81,8 +96,8 @@ app.post('/register', async (req, res)=>{
 // login post route
 app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {session: false}, (err, user, info)=>{
-        console.log("user: ", user);
-        console.log("Info: ", info)
+        // console.log("user: ", user);
+        // console.log("Info: ", info)
         if (err) {
             console.error("Error during authen", err)
             return next(err)
@@ -102,8 +117,15 @@ app.post('/login', (req, res, next)=>{
             token, 
             user: {email: user.email, fname: user.fname}
         });
-    })(req, res, next)
-})
+        // cookie resouce
+        res.cookie("token", token, {
+            httpOnly: true, // can be accessed via js
+            secure: false, // true during production with HTTPS
+            sameSite: "lax",
+            // maxAge
+        })
+    })(req, res, next);
+});
 
 //Local passport configuration
 passport.use('local', new Strategy( {
@@ -125,7 +147,25 @@ passport.use('local', new Strategy( {
     }catch(err){
         console.error(err.message)
     }
-}))
+}));
+
+passport.use(
+    new JwtStrategy(
+      {
+        jwtFromRequest: req => req.cookies.token,
+        secretOrKey: process.env.JWT_SECRET, // same as used when signing token
+      },
+      async (payload, done) => {
+        try {
+          const user = await db.findOne({ _id: payload.sub });
+          if (user) return done(null, user);
+          return done(null, false);
+        } catch (err) {
+          return done(err, false);
+        }
+      }
+    )
+);
 
 passport.serializeUser((user, done)=>{
     done(null, user)
@@ -133,6 +173,31 @@ passport.serializeUser((user, done)=>{
 
 passport.deserializeUser((user, done)=>{
     done(null, user)
+})
+
+
+app.delete('/delete', async (req, res)=>{
+    try{
+       const {email} = req.body;
+       if(email){
+        const result = await db.remove({email: email});
+        if (result){
+            res.json({
+                sucess: true,
+                message: "Account sucessfully deleted"
+            })
+        }else{
+            res.json({
+                message: "An error occured",
+                sucess: false
+            })
+        }
+       }else{
+        res.status(401).json({message: "Invalid data"})
+       }
+    }catch(err){
+        console.log(err.message)
+    }
 })
 
 app.listen(port, ()=>{

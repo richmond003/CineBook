@@ -33,10 +33,9 @@ function stringToColor(string) {
   }
 
 function UserMenu(){
-    const {user, logout} = useAuth();
+    const {user, logout, deleteUser} = useAuth();
     const navigate = useNavigate();
     const fname = user.user.fname;
-   console.log("first name:", fname)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -106,8 +105,14 @@ function UserMenu(){
                         }}>
                         LogOut
                     </MenuItem>
-                    <MenuItem onClick={()=>{
+                    <MenuItem onClick={async ()=>{
                         handleClose();
+                        const response = await deleteUser(user.user);
+                        if(response.sucess){
+                            navigate('/login');
+                        }else{
+                            console.log("An error occured")
+                        }
                         }}>
                         Delect Account
                     </MenuItem>

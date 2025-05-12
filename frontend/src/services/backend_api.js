@@ -29,10 +29,25 @@ export const login = async (userData)=>{
         const data = res.data;
         // console.log('res', res.status)
         console.log("data r at frontend: ",data);
+        console.log("response status: ", res.status)
+        console.log("token", data.token)
         localStorage.setItem('token', data.token) //store JWT
         return data;
     }catch(err){
         console.error(err.message)
+    }
+}
+
+// delete user account
+export const deleteAcc = async (userData)=>{
+    try{
+        const res = await axios.delete("http://localhost:5000/delete", {
+            data: userData
+        });
+        const data = res.data;
+        return data;
+    }catch(err){
+        console.error(err)
     }
 }
   

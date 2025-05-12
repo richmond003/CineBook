@@ -93,7 +93,7 @@ function Show(){
                             <h1 
                                 className="font-[Boldonse] text-3xl font-extrabold  font-stretch-100% basis-center text-purple-500"
                                 >{details.title || "BIG TITLE"}</h1>
-                            <h3 className="">{details.tagline || "TagLine"}</h3>
+                            <h3 className="">{details.tagline || ""}</h3>
                         </div>
 
                         <div className="flex flex-row items-center gap-7">

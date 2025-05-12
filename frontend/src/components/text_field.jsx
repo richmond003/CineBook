@@ -1,12 +1,13 @@
 import { TextField, InputAdornment } from "@mui/material"
 
-function TextFieldComponent({name, label, placeholder, type, required, slotProps, onChange, value}){
+function TextFieldComponent({name, label, placeholder, type, required, slotProps, onChange, value, error}){
     return(
         <>
          <TextField
             fullWidth
             name={name}
             // id="outlined-basic"
+            error = {error} 
             label={label || "Lable"}
             variant="outlined"
             placeholder={placeholder || ""}

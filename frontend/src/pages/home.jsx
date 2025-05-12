@@ -42,11 +42,13 @@ function Home(){
               <Tile
                 title= "Trending Movies"
                 data={trends.movies}
+                isMovie={true}
                 
               />
               <Tile
                 title = "Trending Tv Shows"
                 data={trends.tv_show}
+                isMovie={false}
               />
               <Tile
                 title = "Upcoming"
