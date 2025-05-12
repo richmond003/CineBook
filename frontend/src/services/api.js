@@ -133,4 +133,12 @@ export const genreShows = async (type) => {
   return data;
 };
 
-
+export const getRecommendation = async (type, id)=>{
+  try{
+    const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}/recommendations?language=en-US&page=1`, Header);
+    const data = await res.json();
+    return data.results;
+  }catch(err){
+    console.log(err)
+  }
+}

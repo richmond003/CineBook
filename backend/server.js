@@ -35,10 +35,7 @@ app.use(cors({
 
 app.get('/backend/server', (req, res)=>{
     console.log("Backend Started")
-    res.json({
-        user: "https://i.pinimg.com/736x/db/4c/3b/db4c3bb595c2220012b8b10f654eed6d.jpg",
-        msg: "Hello world"
-    })
+    
 })
 
 app.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -149,6 +146,7 @@ passport.use('local', new Strategy( {
     }
 }));
 
+// JWT Strategy configuration
 passport.use(
     new JwtStrategy(
       {

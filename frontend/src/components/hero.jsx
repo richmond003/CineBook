@@ -95,7 +95,7 @@ function Hero(){
                                     color="secondary" 
                                     size="large" 
                                     startIcon={<Info className="w-7 h-7 fill-purple-500"/>} 
-                                    onClick={()=> navigate(`/info/title`, {
+                                    onClick={()=> navigate(`/info/${show_id}`, {
                                         state: {
                                             id: show_id,
                                             isMovie: media_type === "movie" ? true : false

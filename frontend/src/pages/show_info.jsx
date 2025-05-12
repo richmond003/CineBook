@@ -2,9 +2,9 @@ import Cast from "../components/cast";
 import DropdownButton from "../components/dropdown_button";
 import {ReactComponent as EyeIcon} from '../assets/eye_icon.svg'
 import Card from "../components/card";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { getCast, getDetails, getGallary, getTrailer } from "../services/api";
+import { getCast, getDetails, getGallary, getRecommendation, getTrailer } from "../services/api";
 import {Avatar, Button, Divider, Rating} from '@mui/material';
 
 
@@ -26,9 +26,11 @@ function Show(){
     const [casts, setCasts] = useState([])
     const [trailer, setTrailer] = useState("")
     const [gallary, setGallary] = useState({})
+    const [recommendations, setRecommendations] = useState([])
     const location = useLocation();
     const {id, isMovie} = location.state || {}
-    const data = ['Trailers', 'Season 1', 'Season 2'];
+    // const data = ['Trailers', 'Season 1', 'Season 2'];
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const loadDetails = async ()=>{
@@ -57,6 +59,10 @@ function Show(){
                 const imagesData = await getGallary(isMovie? "movie": "tv", id);
                 console.log(imagesData);
                 setGallary(imagesData);
+
+                // get recommendations
+                const recommendationsData = await getRecommendation(isMovie? "movie":"tv", id);
+                setRecommendations(recommendationsData);
             
             }catch(err){
                 console.error(err.message)
@@ -256,13 +262,17 @@ function Show(){
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-5 pb-10">
                     <h1 className="text-3xl font-bold">Recommendations</h1>
                     <div className="flex flex-row gap-4 overflow-x-scroll scrollbar-hide">
                         {
-                            [...Array(10)].map((_, i)=>(
+                            (recommendations || [...Array(10)]).map((data, index)=>(
                                 <div>
-                                    <Card/>
+                                    <Card
+                                        key={index}
+                                        data={data}
+                                        onClick={()=>{}}
+                                    />
                                 </div>
                             ))
                         }
