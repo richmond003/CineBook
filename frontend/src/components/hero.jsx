@@ -51,7 +51,6 @@ function Hero(){
             if(isAdded ===  false){
                 await addUserFavorite(sendData);
             }else{
-                console.log("Is already added :)")
                 await removeFav(sendData);
             }
            

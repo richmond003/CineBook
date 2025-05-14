@@ -137,7 +137,6 @@ app.put("/addtolist", async (req, res)=>{
         const {email, id, showType}= req.body;
         const oldIds = await db.findOne({email: email});
         const updatedIds = [...(oldIds.showIds || []), {showId: id, idType: showType}]
-        console.log("This is updated ids: ", updatedIds)
         const result = await db.update(
             {email: email},
             {$set: {showIds: updatedIds}}
