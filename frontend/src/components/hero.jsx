@@ -41,7 +41,6 @@ function Hero(){
 
     // functions
     function showAsBackground(index){
-        console.log(index)
         setMovieIndex(index)
     }
 

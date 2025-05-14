@@ -81,7 +81,7 @@ function SignUp(){
             <div className="h-screen w-screen border-4 overflow-hidden place-content-center place-items-center">
                <div className="border-4 border-amber-200 h-150 - w-300 flex flex-row">
                     <div className="border-4 border-green-500 h-full w-[40%] ">
-                        <div className="border-4 h-full flex flex-col justify-center items-center gap-5 mx-7">
+                        <div className="h-full flex flex-col justify-center items-center gap-5 mx-7">
                             <div>Sign Up</div>
                                 <form
                                 onSubmit={handleSubmit}
@@ -155,7 +155,7 @@ function SignUp(){
                     </div>
 
                     <div className="border-4 border-sky-500 w-[60%] h-full place-content-center place-items-center">
-                    <div className="border-4 flex flex-col justify-center items-center gap-10">
+                    <div className="flex flex-col justify-center items-center gap-10">
                             <div className="flex flex-col justify-center items-center gap-5">
                                 <div>Hey There!</div>
                                 <div>

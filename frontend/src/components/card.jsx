@@ -12,7 +12,7 @@ function Card({data, onClick, style}){
             //         <p className="text-9xl text-start font-extrabold leading-none font-[Train-One] text-[#C0C0C0]">1</p>
             //     </div>
             // </div>
-            <div onClick={onClick} className={style || "border-2 rounded-xl h-70 w-50 overflow-hidden transition delay-90 duration-300 ease-in-out hover:-translate-y-1 hover:scale-109 hover:z-40"}>
+            <div onClick={onClick} className={style || "rounded-xl h-70 w-50 overflow-hidden transition delay-90 duration-300 ease-in-out hover:-translate-y-1 hover:scale-109 hover:z-40"}>
                 {/* <div className='h-[80%]'> */}
                     <img 
                         src={`https://image.tmdb.org/t/p/original/${data?.poster_path}`} 

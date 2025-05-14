@@ -6,6 +6,10 @@ import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { getCast, getDetails, getGallary, getRecommendation, getTrailer } from "../services/api";
 import {Avatar, Button, Divider, Rating} from '@mui/material';
+import { useAuth } from "../context/AuthenContext";
+import {ReactComponent as Checked} from "../assets/checked_icon.svg";
+import {ReactComponent as Add} from '../assets/add_icon2.svg';
+
 
 
 function Show(){
@@ -29,8 +33,8 @@ function Show(){
     const [recommendations, setRecommendations] = useState([])
     const location = useLocation();
     const {id, isMovie} = location.state || {}
-    // const data = ['Trailers', 'Season 1', 'Season 2'];
     const navigate = useNavigate();
+    const {user, favorite, addUserFavorite, removeFav} = useAuth();
 
     useEffect(()=>{
         const loadDetails = async ()=>{
@@ -76,6 +80,21 @@ function Show(){
     const runtimeHours = Math.floor(runtime / 60);
     const runtimeMinutes = runtime % 60;
     const runtimeString = `${runtimeHours}h ${runtimeMinutes}min`;
+    const isAdded = favorite.some(item => item.showId === id);
+
+     async function addToList(){
+        try{
+            const sendData = {email: user.user.email, id: id, showType: isMovie? "movie":"tv"};
+            if(isAdded ===  false){
+                await addUserFavorite(sendData);
+            }else{
+                await removeFav(sendData);
+            }
+           
+        }catch(err){
+            console.log(err)
+        }
+    }
 
     const homePage = ()=>{
         window.location.href = details?.homepage;
@@ -115,7 +134,9 @@ function Show(){
                                 variant="contained"
                                 color="secondary"
                                 size="large"
-                            >Add to My List</Button>
+                                startIcon={isAdded?<Checked className="w-7 h-7"/>:<Add className=" w-7 h-7 fill-white"/>}
+                                onClick={addToList}
+                            >{isAdded? "Remove from list":"Add To List"}</Button>
                         </div>
 
                         <div className="mb-5">
