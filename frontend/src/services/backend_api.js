@@ -50,4 +50,26 @@ export const deleteAcc = async (userData)=>{
         console.error(err)
     }
 }
-  
+
+// add review
+export const addToList = async (userData) => {
+    try{
+        const res = await axios.put("http://localhost:5000/addtolist",  userData);
+        const data = res.data;
+        return data;
+    }catch(err){
+        console.error(err)
+    }
+}
+
+export const removeFromList = async (userData) => {
+     try{
+        const res = await axios.delete("http://localhost:5000/remove_favorite",  {
+            data: userData
+        });
+        const data = res.data;
+        return data;
+    }catch(err){
+        console.error(err)
+    }
+}

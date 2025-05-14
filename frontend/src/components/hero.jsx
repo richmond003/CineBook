@@ -4,9 +4,11 @@ import Card from "./card";
 import { getPopularMovies, trending} from "../services/api";
 import { ReactComponent as Info } from '../assets/icons8-information-64.svg';
 import {ReactComponent as Add} from '../assets/add_icon2.svg';
+import {ReactComponent as Checked} from '../assets/checked_icon.svg';
 import {ReactComponent as Star} from '../assets/star-circle2.svg';
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
+import { useAuth } from "../context/AuthenContext";
 
 function Hero(){
     // react hooks
@@ -14,6 +16,7 @@ function Hero(){
     const [movieIndex, setMovieIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const {user, favorite, addUserFavorite, removeFav} = useAuth();
 
     useEffect(()=>{
         const loadMovies = async ()=>{
@@ -34,11 +37,27 @@ function Hero(){
     const rating = movies[movieIndex]?.vote_average.toFixed(1);
     const show_id = movies[movieIndex]?.id;
     const media_type = movies[movieIndex]?.media_type;
+    const isAdded = favorite.some(item => item.showId === show_id);
 
     // functions
     function showAsBackground(index){
         console.log(index)
         setMovieIndex(index)
+    }
+
+    async function addToList(){
+        try{
+            const sendData = {email: user.user.email, id: show_id, showType: media_type};
+            if(isAdded ===  false){
+                await addUserFavorite(sendData);
+            }else{
+                console.log("Is already added :)")
+                await removeFav(sendData);
+            }
+           
+        }catch(err){
+            console.log(err)
+        }
     }
 
     return(
@@ -75,26 +94,12 @@ function Hero(){
                                 </p>
 
                                 <div className="flex flex-row gap-5">
-                                    {/* <Button
-                                        title= "Get Info"
-                                        handclick={()=> navigate(`/info/title`, {
-                                            state: {
-                                                id: show_id
-                                            }
-                                        })}
-                                        style= "border-1 border-purple-500 text-purple-500 h-10 w-40 rounded-2xl hover:bg-purple-500 hover:text-white group pointer-event-auto"
-                                        icon={<Info className="w-7 h-7 fill-purple-500 group-hover:fill-white"/>}
-                                    />
-                                    <Button
-                                        title= "My List"
-                                        style= "border-1 h-10 w-40 rounded-2xl"
-                                        icon={<Add className=" w-7 h-7 fill-white"/>}
-                                    /> */}
+                                 
                                     <Button 
-                                    variant="outlined" 
+                                    variant="contained" 
                                     color="secondary" 
                                     size="large" 
-                                    startIcon={<Info className="w-7 h-7 fill-purple-500"/>} 
+                                    startIcon={<Info className="w-7 h-7 fill-white"/>} 
                                     onClick={()=> navigate(`/info/${show_id}`, {
                                         state: {
                                             id: show_id,
@@ -105,11 +110,12 @@ function Hero(){
 
 
                                     <Button
-                                        variant="contained"
-                                        color="secondary"
+                                        variant="outlined"
+                                        color="primary"
                                         size="large"
-                                        startIcon={<Add className=" w-7 h-7 fill-white"/>}
-                                    >Add To List</Button>
+                                        startIcon={isAdded?<Checked className="w-7 h-7"/>:<Add className=" w-7 h-7 fill-white"/>}
+                                        onClick={addToList}
+                                    >{isAdded? "Remove from list":"Add To List"}</Button>
                                 </div>
                                 
                                  

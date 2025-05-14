@@ -69,7 +69,7 @@ function Show(){
             }
         }
         loadDetails();
-    }, [])
+    }, [id])
 
     const runtime = details.runtime;
     console.log('runtime: ',runtime)
@@ -271,7 +271,12 @@ function Show(){
                                     <Card
                                         key={index}
                                         data={data}
-                                        onClick={()=>{}}
+                                        onClick={()=>{navigate(`/info/${data.id}`, {
+                                            state: {
+                                                id: data.id,
+                                                isMovie: data.media_type = 'movie'? true: false
+                                            }
+                                        })}}
                                     />
                                 </div>
                             ))

@@ -39,15 +39,19 @@ app.get('/backend/server', (req, res)=>{
 })
 
 app.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-    // passport sets req.user if token is valid
-    res.json({
-      message: 'Profile data fetched successfully',
-      user: {
-        fname: req.user.fname,
-        email: req.user.email,
-      },
-    });
-  });
+    try{
+        // passport sets req.user if token is valid
+        res.json({
+        message: 'Profile data fetched successfully',
+        user: {
+            fname: req.user.fname,
+            email: req.user.email,
+        },
+        });
+    }catch(err){
+        console.error('Error from profile: ',err)
+    }
+});
 
 // register new user or redirect existing email to 
 app.post('/register', async (req, res)=>{
@@ -88,10 +92,12 @@ app.post('/register', async (req, res)=>{
     }catch(err){
         console.error(err.message)
     }
-})
+});
+
 
 // login post route
 app.post('/login', (req, res, next)=>{
+    try{
     passport.authenticate('local', {session: false}, (err, user, info)=>{
         // console.log("user: ", user);
         // console.log("Info: ", info)
@@ -105,14 +111,13 @@ app.post('/login', (req, res, next)=>{
                 sucess: false
             }) 
         };
-
          //if login sucessfull
         const token = jwt.sign({sub: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
         res.json({
             message: 'Login sucess', 
             sucess: true,
             token, 
-            user: {email: user.email, fname: user.fname}
+            user: {email: user.email, fname: user.fname, favorite: user.showIds || []}
         });
         // cookie resouce
         res.cookie("token", token, {
@@ -122,14 +127,55 @@ app.post('/login', (req, res, next)=>{
             // maxAge
         })
     })(req, res, next);
+    }catch(err){
+        console.error("Error from login", err)
+    }
 });
+
+app.put("/addtolist", async (req, res)=>{
+    try{
+        const {email, id, showType}= req.body;
+        const oldIds = await db.findOne({email: email});
+        const updatedIds = [...(oldIds.showIds || []), {showId: id, idType: showType}]
+        console.log("This is updated ids: ", updatedIds)
+        const result = await db.update(
+            {email: email},
+            {$set: {showIds: updatedIds}}
+        );
+        if(result){
+            const user = await db.findOne({email: email});
+            const showIds = user?.showIds || [];
+            res.json({idsData: showIds})
+        }     
+    }catch(err){
+        console.log(err)
+    }
+});
+
+app.delete('/remove_favorite', async (req, res)=>{
+    try{
+        const {email, id, showType} = req.body;
+        const oldIds = await db.findOne({email: email});
+        const fiteredIds = (oldIds.showIds || []).filter(item => !(item.showId === id && item.idType === showType));
+        const result = await db.update(
+            {email: email},
+            {$set: {showIds: fiteredIds}}
+        )
+        if(result){
+            const user = await db.findOne({email: email});
+            const showIds = user?.showIds || [];
+            res.json({idsData: showIds})
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
 
 //Local passport configuration
 passport.use('local', new Strategy( {
     usernameField: 'email', 
     passwordField: 'password' 
     },
-
     async function verify(email, password, done){
     console.log("email: ", email)
     console.log("password: ", password)

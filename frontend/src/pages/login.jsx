@@ -33,16 +33,15 @@ function Login(){
         }catch(err){
             console.error(err.message)
         }
-        
     }
 
     return(
         <>
-            <div className="border-4 h-screen w-screen overflow-hidden place-content-center place-items-center">
+            <div className="h-screen w-screen overflow-hidden place-content-center place-items-center">
                 <div className="border-4 border-red-400 h-150 w-300 flex flex-row">
 
-                    <div className="border-4 h-full w-[60%] place-content-center place-items-center">
-                        <div className="border-4 flex flex-col justify-center items-center gap-10">
+                    <div className="h-full w-[60%] place-content-center place-items-center">
+                        <div className="flex flex-col justify-center items-center gap-10">
                             <div className="flex flex-col justify-center items-center gap-5">
                                 <div>Hey There!</div>
                                 <div>
@@ -64,7 +63,7 @@ function Login(){
                     </div>
 
                     <div className="w-[40%] border-4 border-amber-300">
-                        <div className="border-4 h-full flex flex-col justify-center items-center gap-5 mx-7">
+                        <div className="h-full flex flex-col justify-center items-center gap-5 mx-7">
                             <div>Log In</div>
                             <form 
                                 className="flex flex-col gap-4 w-full"

@@ -1,12 +1,13 @@
 import {createContext, useContext, useEffect, useState } from "react";
-import { deleteAcc, login, registerUser } from "../services/backend_api";
+import { addToList, deleteAcc, login, registerUser, removeFromList } from "../services/backend_api";
 
 
 const AuthenContext = createContext();
 
 export const AuthenProvider = ({children})=>{
-    const [user, setUser] = useState(null)
-
+    const [user, setUser] = useState(null);
+    const [favorite, setFavourite] = useState([]);
+  
     useEffect(()=>{
         const token = localStorage.getItem("token");
         console.log("ctx: ",token)
@@ -41,8 +42,19 @@ export const AuthenProvider = ({children})=>{
         const data = await login(userData);
         console.log("user from context: ", data)
         setUser(data);
+        setFavourite(user.user.favorite);
         return data;
     };
+
+    const addUserFavorite = async (userdata)=>{
+      const data = await addToList(userdata);
+      setFavourite(data.idsData)
+    }
+
+    const removeFav = async (userData)=>{
+      const data = await removeFromList(userData);
+      setFavourite(data.idsData)
+    }
 
     const logout = () =>{
         localStorage.removeItem('token')
@@ -57,7 +69,7 @@ export const AuthenProvider = ({children})=>{
     }
 
     return (
-        <AuthenContext.Provider value={{user, signUpUser, loginUser, logout, deleteUser}}>
+        <AuthenContext.Provider value={{user, favorite ,signUpUser, loginUser, logout, deleteUser, addUserFavorite, removeFav}}>
             {children}
         </AuthenContext.Provider>
     );

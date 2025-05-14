@@ -2,9 +2,12 @@ import { useEffect, useState } from "react"
 import Hero from "../components/hero"
 import Tile from "../components/tile"
 import { trending, upcoming_show } from "../services/api";
+import { useAuth } from "../context/AuthenContext";
 
 
 function Home(){
+    const {user} = useAuth();
+    console.log("User from homepage: ",user)
     const [trends, setTrends] = useState({
       movies: [],
       tv_show: []
