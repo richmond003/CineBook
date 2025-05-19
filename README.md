@@ -3,9 +3,9 @@
 ---
 ![Image](https://github.com/user-attachments/assets/204322ac-154c-4a0e-ba67-60ce6730336e)
 
-# 🎬 CineTrack – Movie & TV Tracker
+# 🎬 CineBook – Movie & TV Tracker
 
-CineTrack is a full-stack web application that allows users to discover movies and TV shows using the TMDB API, view detailed information, and manage a personal watchlist. Built with React, Express, and NeDB, it features user authentication, route protection, and persistent user data with a clean, responsive interface.
+CineBook is a full-stack web application that allows users to discover movies and TV shows using the TMDB API, view detailed information, and manage a personal watchlist. Built with React, Express, and NeDB, it features user authentication, route protection, and persistent user data with a clean, responsive interface.
 
 ---
 
@@ -16,7 +16,7 @@ CineTrack is a full-stack web application that allows users to discover movies a
 - 🔍 Discover movies and TV shows by genre or popularity
 - 🎥 View trailers and detailed information using TMDB
 - 🧠 Protected routes and persistent login with localStorage
-- 📱 Fully responsive layout using Tailwind CSS
+- 📱 Fully responsive layout using Tailwind CSS and Material UI
 
 ---
 
@@ -27,6 +27,7 @@ CineTrack is a full-stack web application that allows users to discover movies a
 - React Router DOM
 - Tailwind CSS
 - TMDB API integration
+- Material UI
 
 **Backend**
 - Express.js
