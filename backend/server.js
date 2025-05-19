@@ -124,7 +124,7 @@ app.post('/login', (req, res, next)=>{
             httpOnly: true, // can be accessed via js
             secure: false, // true during production with HTTPS
             sameSite: "lax",
-            // maxAge
+            maxAge: 100// maxAge
         })
     })(req, res, next);
     }catch(err){
@@ -195,7 +195,7 @@ passport.use('local', new Strategy( {
 passport.use(
     new JwtStrategy(
       {
-        jwtFromRequest: req => req.cookies.token,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: process.env.JWT_SECRET, // same as used when signing token
       },
       async (payload, done) => {

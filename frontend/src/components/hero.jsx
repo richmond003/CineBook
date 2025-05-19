@@ -14,7 +14,6 @@ function Hero(){
     // react hooks
     const [movies, setMovies] = useState([]);
     const [movieIndex, setMovieIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const {user, favorite, addUserFavorite, removeFav} = useAuth();
 
