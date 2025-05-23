@@ -44,3 +44,4 @@ CineBook is a full-stack web application that allows users to discover movies an
 ```bash
 git clone https://github.com/yourusername/cinetrack.git
 cd cinetrack
+run npm start
